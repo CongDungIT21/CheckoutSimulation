@@ -55,10 +55,6 @@ export class GameManager extends Component {
         this.GameState = GameState.GS_LOAD;
         await this.loadGame();
         this.GameState = GameState.GS_PLAYING;
-        this.scheduleOnce(() => {
-            console.log("Herererere");
-            director.loadScene(director.getScene().name);
-        }, 5)
     }
 
     private async loadGame()

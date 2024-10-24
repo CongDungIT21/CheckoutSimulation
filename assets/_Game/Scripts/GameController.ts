@@ -183,7 +183,6 @@ export class GameController extends Component {
             {
                 console.log("Game Completed Go Ads");
                 window.open("https://www.google.com.vn/?hl=vi", '_blank').focus();
-                director.loadScene("Game");
             }
             else
             {
