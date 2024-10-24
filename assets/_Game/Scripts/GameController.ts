@@ -139,7 +139,9 @@ export class GameController extends Component {
             let tablePoint: Vec3 = new Vec3();
             Vec3.scaleAndAdd(tablePoint, this.TablePoint.getWorldPosition(), this._directionCheckout, this._spaceBetweenCustomer * i);
             this._tablePoints.push(tablePoint);
-            nodeCustomer.setWorldPosition(this.InitPoint.getWorldPosition());
+
+            let intPos = MathUtils.randomPointInAnnulus(this.InitPoint.getWorldPosition(), 1, 3);
+            nodeCustomer.setWorldPosition(intPos);
             customer.Init(data);            
             customer.moveToTarget(tablePoint);
             this._customers.push(customer);
@@ -166,7 +168,8 @@ export class GameController extends Component {
         this.node.addChild(nodeProduct);
         nodeProduct.setWorldPosition(this.productStartPoint.getWorldPosition());
         product.Init(data);
-        product.moveToTarget(this.productEndPoint.getWorldPosition(), MathUtils.getRandomNumberFloat(0, 1));
+        let endPos = MathUtils.randomPointInAnnulus(this.productEndPoint.getWorldPosition(), 0.5, 1.5);
+        product.moveToTarget(endPos, MathUtils.getRandomNumberFloat(0, 1));
     }
 
     checkOutCompleted(): void
