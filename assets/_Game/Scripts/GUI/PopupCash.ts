@@ -68,12 +68,13 @@ export class PopupCash extends Component {
         if(this._bill.checkCompletedPayment())
         {
             AudioSystem.instance.playCorrectSound();
+            this.resertCashVisible();
+            this._bill.checkOutWithBill();
         }
         else
         {
             AudioSystem.instance.playInCorrectSound();
-        }
-        this.resertCashVisible();
+        }        
     }
 
     private resertCashVisible()

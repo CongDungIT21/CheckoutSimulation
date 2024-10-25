@@ -1,6 +1,7 @@
 import { _decorator, Button, Component, Label, Node } from 'cc';
 import { Constants } from '../Common/Constants';
 import { Bill } from '../Bill';
+import { AudioSystem } from '../AudioSystem';
 const { ccclass, property } = _decorator;
 
 @ccclass('PopupCreditCash')
@@ -38,13 +39,20 @@ export class PopupCreditCash extends Component {
         {
             let num: number = parseFloat(this.lblReceive.string);
             this._bill.receiveCash(num);
-            if(!this._bill.checkCompletedPayment())
+            if(this._bill.checkCompletedPayment())
             {
+                AudioSystem.instance.playCorrectSound();
+                this._bill.checkOutWithBill();                
+            }   
+            else
+            {
+                AudioSystem.instance.playInCorrectSound();
                 this.UpdateReceive("");
-            }            
+            }         
         }                
         else
         {
+            AudioSystem.instance.playInCorrectSound();
             this.UpdateReceive("");
         }
     }

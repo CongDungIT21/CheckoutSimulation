@@ -43,6 +43,7 @@ export class GameManager extends Component {
 
     private _gameState: GameState = GameState.GS_LOAD;
     private set GameState(state: GameState) {
+        console.log("Emit State: " + state);
         this._gameState = state;   
         this.StateEvent.emit(state, this._gameState);     
     }
@@ -54,13 +55,14 @@ export class GameManager extends Component {
     protected async start() {
         this.GameState = GameState.GS_LOAD;
         await this.loadGame();
+        console.log("Loag Game Done");
         this.GameState = GameState.GS_PLAYING;
     }
 
     private async loadGame()
     {
         this.loadDataGame();
-        await this.loadResourceGame();
+        await this.loadResourceGame();        
     }
 
     private loadDataGame()
@@ -73,6 +75,7 @@ export class GameManager extends Component {
     private async loadResourceGame()
     {
         await ResourceManager.instance.loadResources();
+        console.log("Load Resource Done");
     }
 
     //Read from file, server, config....

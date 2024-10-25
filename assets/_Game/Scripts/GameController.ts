@@ -54,9 +54,14 @@ export class GameController extends Component {
     private _spaceBetweenCustomer: number = 3;
     private _bill: Bill
 
-    private _customers: Array<Customer> = [];
+    private _customers: Customer[] = [];
+    private _inited: boolean = false;
 
-    protected start(): void {          
+    protected onLoad(): void {
+        GameController._instance = this;
+    }    
+
+    protected start(): void {
         GameManager.instance.StateEvent.on(GameState.GS_PLAYING, this.initGame, this);
     }
 
@@ -88,6 +93,7 @@ export class GameController extends Component {
 
     public checkOut(customer: Customer): void
     {
+        console.log("Check Out");
         this.generateProductToBuy(customer.Data.listProductToBuy);
         let strategy: PaymentStrategy = this.algorithmPaymentStrategy();
         this._bill = new BillBuilder()
@@ -99,11 +105,21 @@ export class GameController extends Component {
 
     public canCheckOut(customer: Customer): boolean
     {
-        return customer === this._customers[0];
+        console.log("canCheckOut");
+        if(this._customers[0])
+        {
+            return customer === this._customers[0];
+        }
+        
+        return false;
     }
 
     private initGame()
     {
+        console.log("initGame");
+        if(this._inited) 
+            return;
+        this._inited = true;
         this.generateCustomer();
     }
 
@@ -112,22 +128,23 @@ export class GameController extends Component {
     {
         let strategy: number = MathUtils.getRandomNumber(0, 2); //(0, 1]
 
-        // if(strategy === 0)
-        // {
-        //     console.log("Cash Payment Strategy");
-        //     return new CashPaymentStrategy();
-        // }
-        // else if(strategy === 1)
-        // {
-        //     console.log("CreditCardPaymentStrategy");
-        //     return new CreditCardPaymentStrategy();
-        // }
+        if(strategy === 0)
+        {
+            console.log("Cash Payment Strategy");
+            return new CashPaymentStrategy();
+        }
+        else if(strategy === 1)
+        {
+            console.log("CreditCardPaymentStrategy");
+            return new CreditCardPaymentStrategy();
+        }
 
         return new CashPaymentStrategy();
     }
 
     generateCustomer()
     {
+        console.log("generateCustomer");
         //shuffle để random vị trí xuất hiện
         let datas: CustomerData[] = GameManager.instance.CustomerDatas;        
 
@@ -148,14 +165,21 @@ export class GameController extends Component {
 
             let intPos = MathUtils.randomPointInAnnulus(this.InitPoint.getWorldPosition(), 1, 3);
             nodeCustomer.setWorldPosition(intPos);
-            customer.Init(data);            
-            customer.moveToTarget(tablePoint);
+            customer.Init(data);                        
             this._customers.push(customer);
         }
+
+        for(let i = 0; i < this._customers.length; i++)
+        {
+            this._customers[i].moveToTarget(this._tablePoints[i]);
+        }
+
+        console.log("Test: " + this._customers[0]);
     }
 
     generateProductToBuy(listProductToBuy: ProductToBuyData[]): void
     {
+        console.log("generateProductToBuy");
         for(let i = 0; i < listProductToBuy.length; i++)
         {
             let data: ProductToBuyData = listProductToBuy[i];
@@ -168,7 +192,8 @@ export class GameController extends Component {
     }
 
     generateProduct(data: ProductData): void
-    {
+    {        
+        console.log("Generater Product: " + data.ID);
         let nodeProduct: Node = instantiate(ResourceManager.instance.getProductPrefab(data.ID));
         let product: Product = nodeProduct.getComponent(Product);
         this.node.addChild(nodeProduct);

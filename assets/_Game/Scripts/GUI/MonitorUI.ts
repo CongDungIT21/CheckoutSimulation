@@ -1,4 +1,4 @@
-import { _decorator, Component, Label, Node } from 'cc';
+import { _decorator, Color, Component, Label, Node } from 'cc';
 import MathUtils from '../Common/MathUtils';
 const { ccclass, property } = _decorator;
 
@@ -29,8 +29,10 @@ export class MonitorUI extends Component {
         this.totalCash.string = "$" + MathUtils.roundToTwoDecimal(cash);
     }
 
-    public UpdateGiveCash(cash: number): void {
+    public UpdateGiveCash(cash: number, isCorrect: boolean = false): void {
         this.giveCash.string = "$" + MathUtils.roundToTwoDecimal(cash);
+        if(isCorrect) this.giveCash.color = Color.GREEN;
+        else this.giveCash.color = Color.RED;
     }
 
     public ShowCashStrategy(): void {

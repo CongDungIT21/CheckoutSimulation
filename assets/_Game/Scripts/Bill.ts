@@ -71,14 +71,14 @@ export class Bill {
     public giveCash(cash: number): void
     {
         this.give = cash;
-        this.Monitor.UpdateGiveCash(this.give);
+        this.Monitor.UpdateGiveCash(this.give, (this.receive - this.total - this.give === 0));
     }
 
     public addGiveCash(cash: number): void
     {
         this.give += cash;
         this.give = MathUtils.roundToTwoDecimalNormalize(this.give);
-        this.Monitor.UpdateGiveCash(this.give);
+        this.Monitor.UpdateGiveCash(this.give, (this.receive - this.total - this.give === 0));
     }
 
     public checkCompletedPayment(): boolean
@@ -86,7 +86,6 @@ export class Bill {
         if(this.receive - this.total - this.give === 0)
         {
             console.log("Payment Completed");
-            GameController.instance.checkOutCompleted();
             return true;
         }
         else
@@ -94,6 +93,11 @@ export class Bill {
             console.log("Payment Failed");
             return false;
         }
+    }
+
+    public checkOutWithBill()
+    {
+        GameController.instance.checkOutCompleted();
     }
 
     public resertGiveCash()
