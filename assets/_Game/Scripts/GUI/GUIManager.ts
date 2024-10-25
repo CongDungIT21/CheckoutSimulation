@@ -1,7 +1,8 @@
-import { _decorator, Component, director, find, Node } from 'cc';
+import { _decorator, Component, director, find, Node, tween, Tween, Vec3 } from 'cc';
 import { PopupCash } from './PopupCash';
 import { PopupCreditCash } from './PopupCreditCash';
 import { Bill } from '../Bill';
+import { Easing } from '../Common/Easing';
 const { ccclass, property } = _decorator;
 
 @ccclass('GUIManager')
@@ -41,24 +42,48 @@ export class GUIManager extends Component {
 
     public ShowPopupCash(bill: Bill)
     {
-        this.PopupCash.node.active = true;
-        this.PopupCash.init(bill);
+        //this.PopupCash.node.active = true;
+        this.TweenShow(this.PopupCash.node);
+        this.PopupCash.init(bill);        
     }
 
     public HidePopupCash()
     {
-        this.PopupCash.node.active = false;
+        //this.PopupCash.node.active = false;
+        this.TweenHide(this.PopupCash.node);
     }
 
     public ShowPopupCreditCash(bill: Bill)
     {
-        this.PopupCreditCash.node.active = true;
+        this.TweenShow(this.PopupCreditCash.node);
         this.PopupCreditCash.init(bill);
     }
 
     public HidePopupCreditCash()
     {
-        this.PopupCreditCash.node.active = false;
+        //this.PopupCreditCash.node.active = false;
+        this.TweenHide(this.PopupCreditCash.node);
+    }
+
+    private TweenShow(node: Node)
+    {
+        Tween.stopAllByTarget(node);
+        tween(node)
+            .call(() => {
+                node.active = true;
+                node.scale = new Vec3(0.6, 0.6, 0.6);
+            })
+            .to(0.2, { scale: new Vec3(1, 1, 1)}, {easing: Easing.BackOut})
+            .start();
+    }
+
+    private TweenHide(node: Node)
+    {
+        Tween.stopAllByTarget(node);
+        tween(node)
+            .to(0.2, { scale: new Vec3(0.6, 0.6, 0.6)}, {easing: Easing.BackIn})
+            .call(() => node.active = false)
+            .start();
     }
 }
 
