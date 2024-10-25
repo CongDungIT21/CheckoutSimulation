@@ -29,4 +29,9 @@ export default class MathUtils {
         let pos: Vec3 = new Vec3(origin.x + dir.x * distance, origin.y, origin.z + dir.y * distance);
         return pos;
     }
+
+    public static randomAngle(): number
+    {
+        return Math.random() * 2 * Math.PI * (180 / Math.PI);
+    }    
 }

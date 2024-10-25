@@ -44,6 +44,10 @@ export class GameController extends Component {
     public outPoint: Node | null = null;
     @property({type: MonitorUI})
     private monitorUI: MonitorUI | null = null;
+    @property({type: Node})
+    public cashEndPoint: Node | null = null;
+    @property({type: Node})
+    public cashStartPoint: Node | null = null;
 
     private _tablePoints: Vec3[] = [];
     private _directionCheckout: Vec3 = new Vec3(1, 0, 0);
@@ -108,16 +112,18 @@ export class GameController extends Component {
     {
         let strategy: number = MathUtils.getRandomNumber(0, 2); //(0, 1]
 
-        if(strategy === 0)
-        {
-            console.log("Cash Payment Strategy");
-            return new CashPaymentStrategy();
-        }
-        else if(strategy === 1)
-        {
-            console.log("CreditCardPaymentStrategy");
-            return new CreditCardPaymentStrategy();
-        }
+        // if(strategy === 0)
+        // {
+        //     console.log("Cash Payment Strategy");
+        //     return new CashPaymentStrategy();
+        // }
+        // else if(strategy === 1)
+        // {
+        //     console.log("CreditCardPaymentStrategy");
+        //     return new CreditCardPaymentStrategy();
+        // }
+
+        return new CashPaymentStrategy();
     }
 
     generateCustomer()
