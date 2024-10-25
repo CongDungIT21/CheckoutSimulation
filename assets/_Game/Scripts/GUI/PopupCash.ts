@@ -7,6 +7,7 @@ import { PoolType } from '../PoolSystem/PoolType';
 import MathUtils from '../Common/MathUtils';
 import { Cent } from '../Cent';
 import { Dollar } from '../Dollar';
+import { AudioSystem } from '../AudioSystem';
 const { ccclass, property } = _decorator;
 
 interface IPaymentUI
@@ -64,7 +65,14 @@ export class PopupCash extends Component {
 
     public onClickOke(): void
     {
-        this._bill.checkCompletedPayment();
+        if(this._bill.checkCompletedPayment())
+        {
+            AudioSystem.instance.playCorrectSound();
+        }
+        else
+        {
+            AudioSystem.instance.playInCorrectSound();
+        }
         this.resertCashVisible();
     }
 
